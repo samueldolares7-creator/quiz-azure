@@ -1,145 +1,194 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Quiz Azure App Service</title>
 <style>
-  body {
-    font-family: 'Segoe UI', system-ui, Arial, sans-serif;
-    background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
-    margin: 0; padding: 0;
-    display: flex; justify-content: center; align-items: flex-start;
-    min-height: 100vh;
-  }
-  .container {
-    background: #fff; padding: 30px 40px; margin: 40px 16px;
-    border-radius: 16px; box-shadow: 0 10px 25px rgba(0,0,0,.15);
-    width: 100%; max-width: 520px; text-align: center;
-  }
-  h1 { margin-top: 0; color: #2a2a2a; }
-  input[type="text"] {
-    padding: 12px; width: 100%; max-width: 360px;
-    border-radius: 10px; border: 1px solid #ccc; font-size: 1rem;
-  }
-  .pregunta { font-size: 1.1rem; margin: 18px 0; min-height: 64px; }
-  .opcion {
-    display: block; width: 100%; margin: 8px 0; padding: 12px;
-    border: none; border-radius: 10px; font-size: 1rem; cursor: pointer;
-    transition: all .2s ease; background: #4facfe; color: #fff;
-  }
-  .opcion:hover { background: #00f2fe; transform: translateY(-1px); }
-  .opcion.seleccionada { background: #f093fb; color: #fff; }
-  .btn {
-    margin: 10px 5px; padding: 10px 20px;
-    border-radius: 10px; border: none; cursor: pointer; font-size: 1rem;
-    transition: all .2s ease;
-  }
-  .btn-primario { background: #43e97b; color: #fff; }
-  .btn-primario:hover { background: #38c172; transform: translateY(-1px); }
-  .btn-secundario { background: #6c757d; color: #fff; }
-  .btn-secundario:hover { background: #5a6268; transform: translateY(-1px); }
-  #indicadorPregunta { margin: 6px 0 12px; font-size: .95rem; color: #555; }
-  #tablaClasificacion p { margin: 6px 0; font-weight: 600; }
-  small.muted { color: #666; display:block; margin-top:6px; }
+    body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #a1c4fd, #c2e9fb);
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+        align-items: flex-start;
+        min-height: 100vh;
+    }
+    .container {
+        background: #fff;
+        padding: 30px 40px;
+        margin-top: 40px;
+        border-radius: 15px;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+        width: 90%;
+        max-width: 500px;
+        text-align: center;
+    }
+    h1 {
+        color: #333;
+    }
+    input[type="text"] {
+        padding: 10px;
+        width: 70%;
+        margin: 10px 0;
+        border-radius: 8px;
+        border: 1px solid #ccc;
+        font-size: 1em;
+    }
+    .pregunta {
+        font-size: 1.2em;
+        margin-bottom: 20px;
+        min-height: 60px;
+    }
+    .opcion {
+        display: block;
+        width: 100%;
+        margin: 8px 0;
+        padding: 12px;
+        border: none;
+        border-radius: 10px;
+        font-size: 1em;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        background: #4facfe;
+        color: #fff;
+    }
+    .opcion:hover {
+        background: #00f2fe;
+        transform: translateY(-2px);
+    }
+    .opcion.seleccionada {
+        background: #f093fb;
+        color: #fff;
+    }
+    button {
+        margin: 10px 5px;
+        padding: 10px 20px;
+        border-radius: 10px;
+        border: none;
+        cursor: pointer;
+        font-size: 1em;
+        transition: all 0.3s ease;
+        background: #43e97b;
+        color: #fff;
+    }
+    button:hover {
+        background: #38c172;
+        transform: translateY(-2px);
+    }
+    #tablaClasificacion p {
+        margin: 5px 0;
+        font-weight: bold;
+    }
+    #indicadorPregunta {
+        margin-bottom: 15px;
+        font-size: 0.9em;
+        color: #555;
+    }
 </style>
 </head>
 <body>
+
 <div class="container">
-  <h1>Quiz Azure App Service</h1>
 
-  <div id="inicio">
-    <label for="nombreJugador">Ingresa tu nombre:</label><br/>
-    <input type="text" id="nombreJugador" placeholder="Tu nombre" />
-    <small class="muted">* Solo podrás rendir una vez por nombre.</small>
-    <br/>
-    <button class="btn btn-primario" onclick="iniciarQuiz()">Iniciar</button>
-  </div>
+<h1>Quiz Azure App Service</h1>
 
-  <div id="quiz" style="display:none;">
+<div id="inicio">
+    <label>Ingresa tu nombre:</label><br>
+    <input type="text" id="nombreJugador" placeholder="Tu nombre">
+    <br>
+    <button onclick="iniciarQuiz()">Iniciar</button>
+</div>
+
+<div id="quiz" style="display:none;">
     <div id="indicadorPregunta"></div>
     <div id="preguntaContainer" class="pregunta"></div>
     <div id="opcionesContainer"></div>
-    <button class="btn btn-secundario" onclick="anteriorPregunta()">Atrás</button>
-    <button class="btn btn-primario" onclick="siguientePregunta()">Siguiente</button>
-  </div>
+    <button onclick="anteriorPregunta()">Atrás</button>
+    <button onclick="siguientePregunta()">Siguiente</button>
+</div>
 
-  <div id="resultado" style="display:none;">
+<div id="resultado" style="display:none;">
     <h2>¡Juego terminado!</h2>
     <p id="puntaje"></p>
     <div id="tablaClasificacion"></div>
-    <button class="btn btn-secundario" onclick="reiniciarJuego()">Salir</button>
-  </div>
+    <button onclick="reiniciarJuego()">Salir</button>
 </div>
 
-<!-- Firebase SDK (compat) -->
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-
 <script>
-/* 1) Pega aquí TU configuración de Firebase */
-const firebaseConfig = {
-  apiKey: "TU_API_KEY",
-  authDomain: "TU_AUTH_DOMAIN",
-  projectId: "TU_PROJECT_ID",
-  storageBucket: "TU_STORAGE_BUCKET",
-  messagingSenderId: "TU_SENDER_ID",
-  appId: "TU_APP_ID"
-};
-firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-
-/* Utilidades */
-function normalizarNombre(nombre) {
-  // minúsculas, sin acentos, espacios->_, solo [a-z0-9_]
-  return nombre
-    .toLowerCase()
-    .normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-    .trim().replace(/\s+/g, '_')
-    .replace(/[^a-z0-9_]/g, '');
-}
-
-/* Preguntas */
+// Preguntas
 const preguntas = [
-  { texto: "¿Qué tipo de servicio es Microsoft Azure App Service?",
-    opciones: ["IaaS","SaaS","PaaS","DBaaS"], correcta: 2 },
-  { texto: "¿Qué ventaja principal tiene App Service sobre IaaS?",
-    opciones: [
-      "El usuario debe configurar servidores manualmente",
-      "Permite enfocarse en programar sin preocuparse por servidores",
-      "No se puede usar con .NET",
-      "No permite desplegar aplicaciones web"
-    ], correcta: 1 },
-  { texto: "¿Qué lenguajes soporta Azure App Service?",
-    opciones: [".NET, Java, Node.js, Python, PHP, Ruby","Solo .NET","Solo Python y PHP","Solo Java y Ruby"],
-    correcta: 0 },
-  { texto: "¿Dónde se deben guardar los datos importantes de la app?",
-    opciones: [
-      "En el almacenamiento local de la instancia",
-      "En archivos temporales del servidor",
-      "En servicios de almacenamiento en la nube como Azure SQL, Cosmos DB o Blob Storage",
-      "No es necesario guardarlos"
-    ], correcta: 2 },
-  { texto: "¿Qué método de autenticación facilita App Service?",
-    opciones: ["OAuth, OpenID Connect y Azure AD","Solo usuario y contraseña local","Autenticación de Windows únicamente","No tiene autenticación"],
-    correcta: 0 },
-  { texto: "¿Cómo se escalan las aplicaciones en App Service?",
-    opciones: ["Manual únicamente","Automáticamente según la demanda o manualmente","No se pueden escalar","Solo verticalmente"],
-    correcta: 1 },
-  { texto: "¿Qué ventaja tienen los certificados SSL en App Service?",
-    opciones: [
-      "Garantizan que los clientes puedan modificar la app",
-      "Aseguran que la comunicación esté cifrada y segura",
-      "No tienen ninguna utilidad",
-      "Permiten guardar archivos en el servidor"
-    ], correcta: 1 },
-  { texto: "¿Cuál es la principal conclusión sobre Azure App Service?",
-    opciones: [
-      "Es solo para aplicaciones móviles",
-      "Ofrece una plataforma completa para desplegar y escalar apps sin preocuparse por la infraestructura",
-      "No se puede usar con bases de datos",
-      "Es un servicio de almacenamiento de archivos"
-    ], correcta: 1 }
+    {
+        texto: "¿Qué tipo de servicio es Microsoft Azure App Service?",
+        opciones: ["IaaS", "SaaS", "PaaS", "DBaaS"],
+        correcta: 2
+    },
+    {
+        texto: "¿Qué ventaja principal tiene App Service sobre IaaS?",
+        opciones: [
+            "El usuario debe configurar servidores manualmente",
+            "Permite enfocarse en programar sin preocuparse por servidores",
+            "No se puede usar con .NET",
+            "No permite desplegar aplicaciones web"
+        ],
+        correcta: 1
+    },
+    {
+        texto: "¿Qué lenguajes soporta Azure App Service?",
+        opciones: [".NET, Java, Node.js, Python, PHP, Ruby", "Solo .NET", "Solo Python y PHP", "Solo Java y Ruby"],
+        correcta: 0
+    },
+    {
+        texto: "¿Dónde se deben guardar los datos importantes de la app?",
+        opciones: [
+            "En el almacenamiento local de la instancia",
+            "En archivos temporales del servidor",
+            "En servicios de almacenamiento en la nube como Azure SQL, Cosmos DB o Blob Storage",
+            "No es necesario guardarlos"
+        ],
+        correcta: 2
+    },
+    {
+        texto: "¿Qué método de autenticación facilita App Service?",
+        opciones: [
+            "OAuth, OpenID Connect y Azure AD",
+            "Solo usuario y contraseña local",
+            "Autenticación de Windows únicamente",
+            "No tiene autenticación"
+        ],
+        correcta: 0
+    },
+    {
+        texto: "¿Cómo se escalan las aplicaciones en App Service?",
+        opciones: [
+            "Manual únicamente",
+            "Automáticamente según la demanda o manualmente",
+            "No se pueden escalar",
+            "Solo verticalmente"
+        ],
+        correcta: 1
+    },
+    {
+        texto: "¿Qué ventaja tienen los certificados SSL en App Service?",
+        opciones: [
+            "Garantizan que los clientes puedan modificar la app",
+            "Aseguran que la comunicación esté cifrada y segura",
+            "No tienen ninguna utilidad",
+            "Permiten guardar archivos en el servidor"
+        ],
+        correcta: 1
+    },
+    {
+        texto: "¿Cuál es la principal conclusión sobre Azure App Service?",
+        opciones: [
+            "Es solo para aplicaciones móviles",
+            "Ofrece una plataforma completa para desplegar y escalar apps sin preocuparse por la infraestructura",
+            "No se puede usar con bases de datos",
+            "Es un servicio de almacenamiento de archivos"
+        ],
+        correcta: 1
+    }
 ];
 
 let indicePregunta = 0;
@@ -147,135 +196,91 @@ let puntaje = 0;
 let nombreJugador = "";
 let respuestasJugador = [];
 
-/* Consultas a Firestore */
-async function yaExisteIntento(nombrePlano) {
-  const id = normalizarNombre(nombrePlano);
-  const doc = await db.collection('scores').doc(id).get();
-  return doc.exists;
-}
-async function crearPuntajeUnico(nombrePlano, score, total) {
-  const id = normalizarNombre(nombrePlano);
-  const ref = db.collection('scores').doc(id);
-  // create() Falla si ya existe (evita segundas oportunidades)
-  await ref.create({
-    name: nombrePlano,
-    score: score,
-    total: total,
-    ts: firebase.firestore.FieldValue.serverTimestamp()
-  });
-}
-async function cargarTabla() {
-  const snap = await db.collection('scores')
-    .orderBy('score', 'desc')
-    .orderBy('ts', 'asc')
-    .limit(100)
-    .get();
-  const div = document.getElementById("tablaClasificacion");
-  div.innerHTML = "<h3>Tabla de Clasificación (global)</h3>";
-  let i = 1;
-  snap.forEach(doc => {
-    const d = doc.data();
-    const p = document.createElement("p");
-    p.innerText = `${i}. ${d.name} — ${d.score}/${d.total}`;
-    div.appendChild(p);
-    i++;
-  });
+function jugadorYaJugo(nombre) {
+    let jugados = JSON.parse(localStorage.getItem("jugadores") || "[]");
+    return jugados.includes(nombre);
 }
 
-/* Flujo UI */
-async function iniciarQuiz() {
-  nombreJugador = document.getElementById("nombreJugador").value.trim();
-  if (nombreJugador === "") { alert("Por favor ingresa tu nombre."); return; }
-
-  try {
-    const jugo = await yaExisteIntento(nombreJugador);
-    if (jugo) {
-      alert("Este nombre ya completó el quiz. Solo se permite un intento global.");
-      return;
-    }
-  } catch (e) {
-    console.error(e);
-    alert("No se pudo verificar el intento. Revisa tu conexión e intenta de nuevo.");
-    return;
-  }
-
-  document.getElementById("inicio").style.display = "none";
-  document.getElementById("quiz").style.display = "block";
-  mostrarPregunta();
+function iniciarQuiz() {
+    nombreJugador = document.getElementById("nombreJugador").value.trim();
+    if(nombreJugador === "") { alert("Por favor ingresa tu nombre."); return; }
+    if(jugadorYaJugo(nombreJugador)) { alert("Ya completaste el quiz. Solo se permite un intento."); return; }
+    document.getElementById("inicio").style.display = "none";
+    document.getElementById("quiz").style.display = "block";
+    mostrarPregunta();
 }
 
 function mostrarPregunta() {
-  const pregunta = preguntas[indicePregunta];
-  document.getElementById("preguntaContainer").innerText = pregunta.texto;
-  document.getElementById("indicadorPregunta").innerText =
-    `Pregunta ${indicePregunta + 1} de ${preguntas.length}`;
+    const pregunta = preguntas[indicePregunta];
+    document.getElementById("preguntaContainer").innerText = pregunta.texto;
+    document.getElementById("indicadorPregunta").innerText = `Pregunta ${indicePregunta+1} de ${preguntas.length}`;
 
-  const opcionesContainer = document.getElementById("opcionesContainer");
-  opcionesContainer.innerHTML = "";
-  pregunta.opciones.forEach((opcion, index) => {
-    const btn = document.createElement("button");
-    btn.innerText = opcion;
-    btn.className = "opcion";
-    if (respuestasJugador[indicePregunta] === index) btn.classList.add("seleccionada");
-    btn.onclick = () => seleccionarOpcion(index);
-    opcionesContainer.appendChild(btn);
-  });
+    const opcionesContainer = document.getElementById("opcionesContainer");
+    opcionesContainer.innerHTML = "";
+    pregunta.opciones.forEach((opcion, index) => {
+        const btn = document.createElement("button");
+        btn.innerText = opcion;
+        btn.className = "opcion";
+        if(respuestasJugador[indicePregunta] === index) btn.classList.add("seleccionada");
+        btn.onclick = () => seleccionarOpcion(index);
+        opcionesContainer.appendChild(btn);
+    });
 }
 
 function seleccionarOpcion(index) {
-  respuestasJugador[indicePregunta] = index;
-  mostrarPregunta(); // refresca estilos
+    respuestasJugador[indicePregunta] = index;
+    mostrarPregunta();
 }
 
 function siguientePregunta() {
-  if (respuestasJugador[indicePregunta] == null) {
-    alert("Debes seleccionar una opción.");
-    return;
-  }
-  if (indicePregunta < preguntas.length - 1) {
-    indicePregunta++;
-    mostrarPregunta();
-  } else {
-    finalizarJuego();
-  }
+    if(respuestasJugador[indicePregunta] == null) { alert("Debes seleccionar una opción."); return; }
+    if(indicePregunta < preguntas.length - 1) { indicePregunta++; mostrarPregunta(); } 
+    else { finalizarJuego(); }
 }
 
 function anteriorPregunta() {
-  if (indicePregunta > 0) {
-    indicePregunta--;
-    mostrarPregunta();
-  }
+    if(indicePregunta > 0) { indicePregunta--; mostrarPregunta(); }
 }
 
-async function finalizarJuego() {
-  puntaje = respuestasJugador.reduce((acc, resp, i) =>
-    resp === preguntas[i].correcta ? acc + 1 : acc, 0);
+function finalizarJuego() {
+    puntaje = respuestasJugador.reduce((acc, resp, i) => resp === preguntas[i].correcta ? acc + 1 : acc, 0);
+    document.getElementById("quiz").style.display = "none";
+    document.getElementById("resultado").style.display = "block";
+    document.getElementById("puntaje").innerText = `${nombreJugador} tu puntaje es: ${puntaje} / ${preguntas.length}`;
+    guardarResultado(nombreJugador, puntaje);
+    mostrarTablaClasificacion();
+}
 
-  document.getElementById("quiz").style.display = "none";
-  document.getElementById("resultado").style.display = "block";
-  document.getElementById("puntaje").innerText =
-    `${nombreJugador}, tu puntaje es: ${puntaje} / ${preguntas.length}`;
+function guardarResultado(nombre, puntaje) {
+    let tabla = JSON.parse(localStorage.getItem("tablaClasificacion") || "[]");
+    tabla.push({ nombre, puntaje });
+    localStorage.setItem("tablaClasificacion", JSON.stringify(tabla));
+    let jugados = JSON.parse(localStorage.getItem("jugadores") || "[]");
+    jugados.push(nombre);
+    localStorage.setItem("jugadores", JSON.stringify(jugados));
+}
 
-  try {
-    await crearPuntajeUnico(nombreJugador, puntaje, preguntas.length);
-  } catch (e) {
-    // Si falla por "already-exists", significa que alguien (o tú) ya registró ese nombre
-    console.error(e);
-    alert("No se pudo guardar (posible intento repetido).");
-  }
-
-  await cargarTabla();
+function mostrarTablaClasificacion() {
+    let tabla = JSON.parse(localStorage.getItem("tablaClasificacion") || "[]");
+    tabla.sort((a,b) => b.puntaje - a.puntaje);
+    const div = document.getElementById("tablaClasificacion");
+    div.innerHTML = "<h3>Tabla de Clasificación</h3>";
+    tabla.forEach(jugador => {
+        const p = document.createElement("p");
+        p.innerText = `${jugador.nombre} - ${jugador.puntaje} puntos`;
+        div.appendChild(p);
+    });
 }
 
 function reiniciarJuego() {
-  indicePregunta = 0; puntaje = 0; respuestasJugador = [];
-  document.getElementById("nombreJugador").value = "";
-  document.getElementById("resultado").style.display = "none";
-  document.getElementById("inicio").style.display = "block";
+    indicePregunta = 0;
+    puntaje = 0;
+    respuestasJugador = [];
+    document.getElementById("nombreJugador").value = "";
+    document.getElementById("resultado").style.display = "none";
+    document.getElementById("inicio").style.display = "block";
 }
 </script>
-</body>
-</html>
 
-
+</div
 
